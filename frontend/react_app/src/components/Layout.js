@@ -8,9 +8,7 @@ function Layout(props) {
         <React.Fragment>
             <CssBaseline />
             <TopBar {...props}/>
-            <div>
                 {props.children}
-            </div>
             <Footer />
         </React.Fragment>
     )

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Cell from './Cell';
+import HoursColumn from './Hours';
 import './DataTable.css';
 
 import { withStyles, makeStyles } from '@material-ui/core/styles';
@@ -41,11 +42,6 @@ export default class DataTable extends React.Component {
     const {rows} = this.props;
     return (
       <tr key={`row-${rowIndex}`}>
-                <Cell
-                keys={`row-${_row}`}
-                content={_row}
-                hours={true}
-                  />
         {rows[rowIndex].map((_cell, cellIndex) => {
             return (
                 <Cell
@@ -61,21 +57,16 @@ export default class DataTable extends React.Component {
 
   render() {
     const {headings, rows} = this.props;
-    
+
     const hours = ['8:00', '9:00', '10:00', '11:00',
        '12:00', '13:00', '14:00', '15:00', '16:00',
         '17:00', '18:00', '19:00', '20:00']
-        
+
     this.renderHeadingRow = this.renderHeadingRow.bind(this);
     this.renderRow = this.renderRow.bind(this);
 
     const theadMarkup = (
       <tr key="heading">
-        <Cell   
-            key={'Hours'}
-            content={'Hours'}
-            hours={true}
-        />
         {headings.map(this.renderHeadingRow)}
       </tr>
     );
@@ -84,13 +75,16 @@ export default class DataTable extends React.Component {
 
 
     return (
-        <div className="DataTable">
-            <div className="table table-striped">
-                <table className="table table-bordered" ref={this.tableRef} >
-                    <thead>{theadMarkup}</thead>
-                    <tbody>{tbodyMarkup}</tbody>
-                </table>
-            </div>
+        <div className="DataTable container-fluid">
+          <div className="row justify-content-start">
+                <HoursColumn/>
+                <div className="col-9 col-sm-10 columns pl-0 pr-0 pt-3">
+                  <table className="table table-bordered table-striped" ref={this.tableRef} >
+                      <thead>{theadMarkup}</thead>
+                      <tbody>{tbodyMarkup}</tbody>
+                  </table>
+                </div>
+          </div>
         </div>
     );
   }

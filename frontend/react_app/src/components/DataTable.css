@@ -1,10 +1,3 @@
-.Table {
-  border-spacing: 0px;
-  background: #fff;
-  box-shadow: 0 1px 0 0 rgba(22, 29, 37, 0.05);
-  margin-left: 10%;
-  width: 80%;
-}
 
 .Cell-hours {
     border: 1px solid #06090c;
@@ -13,18 +6,23 @@
     opacity: 1;
     padding: 4px;
     text-align: center;
+    margin-left: 10%;
 }
 
-.DataTable {
-  max-width: 100vw;
+.HoursColumn {
+    max-width: 15%;
+    margin: 0;
+    padding-right: 0px;
+    padding-left: 0p;
+    table-layout: fixed;
+}
+
+.columns {
   overflow-x: auto;
+  padding-left: 0px;
+  table-layout: fixed;
 
 }
-.table thead tr th:first-child {
-    position: sticky;
-    left: 0;
-}
-
 .table tbody tr th {
     position: sticky;
     left: 0;
@@ -35,8 +33,37 @@
   padding: 4px;
   text-align: center;
   vertical-align: top;
-  min-height: 45px;
+  height: 45px;
+  max-height: 45px;
   position: relative;
+  min-width: 100px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  
+}
+
+@media (max-width: 600px) {
+  .Cell {
+    border: 1px solid #545658;
+  padding: 4px;
+  text-align: center;
+  vertical-align: top;
+  height: 45px;
+  max-height: 45px;
+  position: relative;
+  min-width: 25vw;
+  max-width: 25vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  }
+}
+
+.Cell:hover{
+  overflow:visible;
+  text-overflow: clip;
 }
 
 .Cell-header {
@@ -46,7 +73,8 @@
     padding: 4px;
     text-align: center;
     vertical-align: top;
-    min-width: 10%;
+    max-width: 5%;
+  
 }
 
 
@@ -63,8 +91,4 @@
   word-wrap: break-word;
   word-break: break-word;
   overflow-wrap: break-word;
-}
-
-.ScrollContainer {
-  overflow-x: scroll;
 }
