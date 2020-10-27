@@ -37,6 +37,18 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
+    wage = forms.FloatField(label='Wage', required=False)
+
+
+    def save(self, commit=True):
+        user = super(UserChangeForm, self).save(commit=False)
+        #if commit:
+        user.save()
+        print(user.is_instructor)
+        if user.is_instructor:
+            ins = Instructor.objects.create(user=user, wage=self.cleaned_data['wage'])
+            ins.save()   
+        return user
 
 class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
@@ -44,9 +56,10 @@ class UserAdmin(BaseUserAdmin):
     list_display = ('email', 'first_name', 'is_superuser' ,'is_instructor')
     list_filter = ('is_instructor',)
     fieldsets = (
-        (None, {"fields": ('email', 'password')}),
+        (None, {"fields": ('email',)}),
         ('Personal info', {'fields': ('first_name',)}),
         ('Type of user', {'fields': ('is_instructor',)}),
+        ('Instructor', { 'fields': ('wage',)}),
     )
     
     add_fieldsets = (

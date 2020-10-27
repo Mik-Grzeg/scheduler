@@ -21,7 +21,7 @@
   overflow-x: auto;
   padding-left: 0px;
   table-layout: fixed;
-
+  scroll-behavior: smooth;
 }
 .table tbody tr th {
     position: sticky;

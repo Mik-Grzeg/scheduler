@@ -3,15 +3,6 @@ import Cell from './Cell';
 import HoursColumn from './Hours';
 import './DataTable.css';
 
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-
 
 export default class DataTable extends React.Component {
     constructor(props) {
@@ -37,7 +28,7 @@ export default class DataTable extends React.Component {
     };
 
 
-
+    // headings[cellIndex] gives a name of an instructor
   renderRow = (_row, rowIndex) => {
     const {rows} = this.props;
     return (

@@ -45,10 +45,10 @@ export const authFail = error => {
 
 export const authLogout = () => {
     const token = localStorage.getItem('token');
-    if (token == undefined) {
+    if (token === undefined) {
         localStorage.removeItem('expirationDate');
     } else {
-        axios.post(`${settings.API_SERVER}/api/auth/logout/`, {
+        axios.post(`${settings.API_SERVER}/api/rest-auth/logout/`, {
         }, {headers: {'Authorization': `Token ${token}`}} )
         .then(response => {console.log(response)}).catch(err => {console.log(err)})
         localStorage.removeItem('token');
@@ -78,7 +78,7 @@ export const authCheckTimeout = expirationTime => {
 export const authLogin = (email, password) => {
     return dispatch => {
         dispatch(authStart());
-        axios.post(`${settings.API_SERVER}/api/auth/login/`, {
+        axios.post(`${settings.API_SERVER}/api/rest-auth/login/`, {
             email: email,
             password: password
         })
@@ -99,7 +99,7 @@ export const authLogin = (email, password) => {
 export const authCheckState = () => {
     return dispatch => {
         const token = localStorage.getItem('token');
-        if (token == undefined) {
+        if (token === undefined) {
             dispatch(authLogout());
         } else {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));

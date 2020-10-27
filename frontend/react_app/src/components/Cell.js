@@ -1,6 +1,27 @@
+import { blueGrey } from '@material-ui/core/colors';
 import React, { Component } from 'react';
 
+
 export default class Cell extends Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            isToggleOn: false,
+            bgColor: ""
+        }
+        
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        console.log(`CLICK ${this.state.isToggleOn} - ${this.state.bgColor}`);
+        
+        this.setState(state => ({
+            isToggleOn: !state.isToggleOn,
+            bgColor: !state.isToggleOn ? "grey": ""
+        }));
+    }
+
     render() {
         if (this.props.header) {
             return (
@@ -18,7 +39,7 @@ export default class Cell extends Component{
         }
         else {
             return (
-                <td className="Cell">
+                <td className="Cell" onClick={this.handleClick} style={{backgroundColor: this.state.bgColor}}>
                     {this.props.content}
                 </td>
             )

@@ -2,8 +2,15 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.serializers import SerializerMethodField
 
-from .models import Instructor, Client, Appointment
+from .models import Instructor, Client, Appointment, User
 import datetime as dt
+
+class CustomUserDetailsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'is_instructor')
+        read_only_fields = ('email',)
 
 class ClientSerializer(serializers.ModelSerializer):
 

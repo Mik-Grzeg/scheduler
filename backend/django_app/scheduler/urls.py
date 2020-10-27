@@ -5,6 +5,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
 
+from allauth.account.views import confirm_email
+
 from scheduler import views
 
 
@@ -35,9 +37,13 @@ appointment_list = views.AppointmentViewSet.as_view({
 
 urlpatterns = [
     path('', views.api_root),
-    path('auth/login/', views.APILoginView.as_view(), name='api_login'),
-    path('auth/logout/', views.APILogoutView.as_view(), name='api_logout'),
+
+    path('rest-auth/', include('rest_auth.urls')),
+    path('account/', include('allauth.urls')),
+    re_path(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
+
     path('auth/update_password/', views.APIPasswordUpdateView.as_view(), name='api_update_password'),
+    path('auth/registration/', include('rest_auth.registration.urls')),
     path('instructors/', instructor_list, name='instructor-list'),
     path('instructors/<int:pk>/', instructor_detail, name='instructor-detail'),
     path('clients/', client_list, name='client-list'),
