@@ -19,11 +19,13 @@ from rest_auth.views import (LoginView, LogoutView, PasswordChangeView)
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from .permissions import IsOwner
 
 
 class InstructorViewSet(viewsets.ModelViewSet):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
+    permission_classes = []
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -47,7 +49,7 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
-    
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         if 'year' not in self.kwargs:
@@ -60,7 +62,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return Appointment.objects.filter(date=date).order_by('start_time')
 
     def create(self, request):
-    
+        print(request)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -74,14 +76,3 @@ def api_root(request, format=None):
         'clients': reverse('client-list', request=request, format=format),
         'appointments': reverse('appointment-list', request=request, format=format)
     })
-
-
-class APILogoutView(LogoutView):
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-class APILoginView(LoginView):
-    pass
-
-class APIPasswordUpdateView(PasswordChangeView):
-    authentication_classes = [TokenAuthentication]

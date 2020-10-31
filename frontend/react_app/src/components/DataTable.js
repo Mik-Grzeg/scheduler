@@ -2,7 +2,7 @@ import * as React from 'react';
 import Cell from './Cell';
 import HoursColumn from './Hours';
 import './DataTable.css';
-
+import { hours } from '../settings'
 
 export default class DataTable extends React.Component {
     constructor(props) {
@@ -48,10 +48,6 @@ export default class DataTable extends React.Component {
 
   render() {
     const {headings, rows} = this.props;
-
-    const hours = ['8:00', '9:00', '10:00', '11:00',
-       '12:00', '13:00', '14:00', '15:00', '16:00',
-        '17:00', '18:00', '19:00', '20:00']
 
     this.renderHeadingRow = this.renderHeadingRow.bind(this);
     this.renderRow = this.renderRow.bind(this);

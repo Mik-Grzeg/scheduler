@@ -25,8 +25,7 @@ class AppointmentSerializer(serializers.ModelSerializer):
         """
         Check that the start of the lesson is not in the past.
         """
-        print(data)
-        current_time = dt.datetime.now() + dt.timedelta(minutes=5)
+        current_time = dt.datetime.now() + dt.timedelta(minutes=90)
         time_to_reserve = dt.datetime.combine(data['date'], data['start_time'])
         
         if time_to_reserve < current_time:

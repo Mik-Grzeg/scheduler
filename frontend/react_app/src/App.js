@@ -23,7 +23,7 @@ function App(props) {
 const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null && typeof state.auth.token !== 'undefined',
-    token: state.auth.token
+    token: state.auth.token,
   }
 }
 

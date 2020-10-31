@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 
 import Login from "./components/Login";
 import Schedule from "./components/Schedule";
-
+import InstructorDashboard from './components/InstructorDashBoard';
 
 function PrivateRoute({ isAuthenticated, children, ...rest}) {
     return (
@@ -33,6 +33,8 @@ function Urls(props) {
                 <Switch>
                     <Route exact path="/login/"> <Login {...props} /></Route>
                     <PrivateRoute exact path="/" isAuthenticated={props.isAuthenticated}> <Schedule {...props}/></PrivateRoute>
+                    <PrivateRoute exact path="/instructor" isAuthenticated={props.isAuthenticated}> <InstructorDashboard {...props}/></PrivateRoute>
+
                 </Switch>
             </BrowserRouter>
         </div>

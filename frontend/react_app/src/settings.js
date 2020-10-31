@@ -15,3 +15,7 @@ switch (process.env.NODE_ENV) {
 export const API_SERVER = API_SERVER_VAL;
 
 export const SESSION_DURATION = 5*3600*1000;
+
+export const hours = [  '8:00', '9:00', '10:00', '11:00',
+                        '12:00', '13:00', '14:00', '15:00', '16:00',
+                        '17:00', '18:00', '19:00', '20:00']

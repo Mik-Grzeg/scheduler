@@ -14,22 +14,23 @@ class CustomUserManager(BaseUserManager):
     Custom user model manager where email is the unique identifiers
     for authentication instead of usernames.
     """
-    def create_user(self, email, first_name, password, **extra_fields):
+    def create_user(self, email, first_name, password, is_instructor):
         """
         Create and save a User with the given email and password.
         """
         if not email:
             raise ValueError(_('The Email must be set'))
-        #print(**extra_fields)
+        
         email = self.normalize_email(email)
+        
         user = self.model(
             email=email,
             first_name=first_name,
-            **extra_fields)
+            is_instructor=is_instructor)
         user.set_password(password)
         user.save(using=self._db)
-        #if extra_fields['is_instructor'] == True:
-        #   Instructor.objects.create(wage=20, user=user)
+        if is_instructor == True:
+            Instructor.objects.create(wage=20, user=user)
         return user
 
     def create_superuser(self, email, first_name, password, **extra_fields):
@@ -41,7 +42,7 @@ class CustomUserManager(BaseUserManager):
             password=password,
             first_name=first_name,
             is_superuser=True,
-        )
+        ) 
         user.is_admin = True
         user.save(using=self._db)
         return user
@@ -79,14 +80,16 @@ class Instructor(models.Model):
 
     REQUIRED_FIELDS = ('user',)
 
+    class Meta():
+            db_table = 'instructor_info'
+
     def __str__(self):
         #if self.user.last_name:
           #  return self.user.first_name + ' ' + self.user.last_name
         return self.user.first_name
 
-    class Meta():
-        db_table = 'instructor_info'
 
+    
 
 class Client(models.Model):
     AGE_CATEGORIES = (
@@ -128,11 +131,10 @@ def is_available(start_time, end_time, instructor):
 
 class Appointment(models.Model):
     start_time = models.TimeField()
+    date = models.DateField()
+
     instructor = models.ForeignKey(Instructor, related_name='appointments', on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
-    # TODO naprawic do wersji koncowej, date.today() nie dziala
-    date = models.DateField(default=dt.date.today())
-
 
 
     class Meta():

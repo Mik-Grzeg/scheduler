@@ -113,10 +113,12 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-DEFAULT_AUTHENTICATION_CLASSES = [
-    'rest_framework.authentication.TokenAuthentication',
-    # 'rest_framework.authentication.SessionAuthentication',
-]
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 AUTH_USER_MODEL = 'scheduler.User'   
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER':'scheduler.serializers.CustomUserDetailsSerializer' 

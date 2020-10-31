@@ -32,7 +32,7 @@ const authSuccessReducer = (state, action) => {
     return updateObject(state, {
         error: null, 
         loading: false,
-        token: action.token
+        token: action.token,
     });
 }
 
@@ -45,7 +45,8 @@ const authFailReducer = (state, action) => {
 
 const authLogoutReducer = (state, action) => {
     return updateObject(state, {
-        token: null
+        token: null,
+        user: null
     });
 }
 
