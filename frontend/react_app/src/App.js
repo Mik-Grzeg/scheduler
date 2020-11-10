@@ -24,6 +24,8 @@ const mapStateToProps = (state) => {
   return {
     isAuthenticated: state.auth.token !== null && typeof state.auth.token !== 'undefined',
     token: state.auth.token,
+    id: state.auth.id,
+    instructor: state.auth.instructor
   }
 }
 

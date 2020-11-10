@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import DataTable from './DataTable';
+import axios from 'axios';
+import * as settings from '../settings'
+
 
 export function isValidDate() {
   var today = new Date();
@@ -9,12 +12,8 @@ export function isValidDate() {
   var yyyy = today.getFullYear();
 
   today = '/' + yyyy + '/' + mm + '/' + dd + '/';
+  console.log(today)
   return today
-  /**
-  var regEx =/\/([2][0][2-9][0-9])\/([0-1]?[0-9])\/([0-3]?[0-9])\//;
-  var dateString = window.location.pathname;
-  return dateString.match(regEx)[0]
-   */
 }
 
 class Schedule extends Component {
@@ -27,21 +26,26 @@ class Schedule extends Component {
   }
 
   componentDidMount() {
-    let url = 'http://localhost:8000/api/instructors'
-    let date = isValidDate();
-    console.log(date);
-    fetch(url + date)
-    .then(response => {
-      return response.json()
-    })
-    .then(data => {
-      this.setState(() => {
-        return {
-          instructors: data,
-          loaded: true
-        }
+    console.log(this.props)
+    if (this.props.isAuthenticated) {
+      let date = isValidDate();
+
+      let headers = { 'Authorization': `Token ${this.props.token}` };
+      let url = settings.API_SERVER + '/api/instructors/'
+      let method = 'get';
+
+      let config = { headers, method, url }
+
+      axios(config)
+      .then(response => {
+        this.setState(() => {
+          return {
+            instructors: response.data,
+            loaded: true
+          }
+        });
       });
-    });
+    }
   }
 
   render() {

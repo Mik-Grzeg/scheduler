@@ -5,7 +5,9 @@ import * as actionTypes from './authActionTypes';
 export const initialState = {
     error: null,
     loading: false,
-    token: null
+    token: null,
+    id: null,
+    instructor: null
 }
 
 
@@ -33,6 +35,8 @@ const authSuccessReducer = (state, action) => {
         error: null, 
         loading: false,
         token: action.token,
+        id: action.id,
+        instructor: action.instructor
     });
 }
 
@@ -46,7 +50,8 @@ const authFailReducer = (state, action) => {
 const authLogoutReducer = (state, action) => {
     return updateObject(state, {
         token: null,
-        user: null
+        id: null,
+        instructor: null
     });
 }
 

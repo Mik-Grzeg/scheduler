@@ -22,10 +22,15 @@ from rest_framework.permissions import IsAuthenticated
 from .permissions import IsOwner
 
 
+class CustomLoginView(LoginView):
+    def get_response(self):
+        original_response = super().get_response()
+        mydata = {}
+
 class InstructorViewSet(viewsets.ModelViewSet):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e39h@mr1s-5bsy+zg_pji=p9pu_pq-@=vi!lo99eox7(d573yc'
+import sys
+print(sys.prefix)
+
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -115,13 +119,15 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        #'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ]
 }
 AUTH_USER_MODEL = 'scheduler.User'   
 REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER':'scheduler.serializers.CustomUserDetailsSerializer' 
+    'USER_DETAILS_SERIALIZER':'scheduler.serializers.CustomUserDetailsSerializer', 
+    'TOKEN_SERIALIZER': 'scheduler.serializers.TokenSerializer',
+    'LOGIN_SERIALIZER': 'scheduler.serializers.LoginSerializer'
     }
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None

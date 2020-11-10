@@ -29,10 +29,12 @@ export const authStart = () => {
     }
 }
 
-export const authSuccess = (token) => {
+export const authSuccess = (token, id, instructor) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        token: token
+        token: token,
+        id: id,
+        instructor: instructor
     }
 }
 
@@ -45,13 +47,15 @@ export const authFail = error => {
 
 export const authLogout = () => {
     const token = localStorage.getItem('token');
-    if (token === undefined) {
+    if (token == undefined) {
         localStorage.removeItem('expirationDate');
     } else {
         axios.post(`${settings.API_SERVER}/api/rest-auth/logout/`, {
         }, {headers: {'Authorization': `Token ${token}`}} )
         .then(response => {console.log(response)}).catch(err => {console.log(err)})
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        localStorage.removeItem('instructor')
         localStorage.removeItem('expirationDate');
     }
 
@@ -84,11 +88,15 @@ export const authLogin = (email, password) => {
         })
         .then(response => {
             const token = response.data.key;
-            const user = response.data.user_id;
+            const id = response.data.user.id;
+            const instructor = response.data.user.is_instructor;
             const expirationDate = new Date(new Date().getTime() + SESSION_DURATION);
+
             localStorage.setItem('token', token);
+            localStorage.setItem('id', id);
+            localStorage.setItem('instructor', instructor);
             localStorage.setItem('expirationDate', expirationDate);
-            dispatch(authSuccess(token));
+            dispatch(authSuccess(token, id, instructor));
             dispatch(authCheckTimeout(SESSION_DURATION));
         })
         .catch(err => {
@@ -107,7 +115,7 @@ export const authCheckState = () => {
             if (expirationDate <= new Date() ) {
                 dispatch(authLogout());
             } else {
-                dispatch(authSuccess(token));
+                dispatch(authSuccess(token, localStorage.getItem('id'), localStorage.getItem('instructor')) );
                 dispatch(authCheckTimeout( expirationDate.getTime() - new Date().getTime()) );
             }
         }

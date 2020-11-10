@@ -1,20 +1,74 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.serializers import SerializerMethodField
+from rest_framework.exceptions import ValidationError
+from rest_framework.authtoken.models import Token as DefaultTokenModel
+
+from django.utils.translation import ugettext_lazy as _
+
+from django.contrib.auth import authenticate
 
 from .models import Instructor, Client, Appointment, User
 import datetime as dt
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, allow_blank=False)
+    password = serializers.CharField(style={'input_type': 'password'})
+
+    def authenticate(self, **kwargs):
+
+        return authenticate(self.context['request'], **kwargs)
+
+    def _validate_email(self, email, password):
+        user = None 
+
+        if email and password:
+            user = self.authenticate(email=email, password=password)
+        else:
+            msg = _('Must include "email" and "password".')
+            raise ValidationError(msg)
+        
+        return user
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = self._validate_email(email, password)
+
+        if user:
+            if not user.is_active:
+                msg = _('User account is disabled.')
+                raise ValidationError(msg)
+        else:
+            msg = _('Unable to log in with provided credentials.')
+            raise ValidationError(msg)
+        
+        email_address = user.emailaddress_set.get(email=user.email)
+        if not email_address.verified:
+            raise serializers.ValidationError(_('E-mail is not verified.'))
+
+        attrs['user'] = user
+        return attrs
+
 
 class CustomUserDetailsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'is_instructor')
+        fields = ('id', 'email', 'first_name', 'is_instructor')
         read_only_fields = ('email',)
 
-class ClientSerializer(serializers.ModelSerializer):
 
-    
+class TokenSerializer(serializers.ModelSerializer):
+    user = CustomUserDetailsSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = DefaultTokenModel
+        fields = ('key', 'user')
+
+
+class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('user_id', 'first_name', 'age_category', 'email')
