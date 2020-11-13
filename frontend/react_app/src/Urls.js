@@ -5,6 +5,8 @@ import { Redirect } from "react-router-dom/cjs/react-router-dom.min";
 import Login from "./components/Login";
 import Schedule from "./components/Schedule";
 import InstructorDashboard from './components/InstructorDashBoard';
+import { NewAppointmentFormContainer } from './components/NewAppointment';
+
 
 function PrivateRoute({ isAuthenticated, children, ...rest}) {
     return (
@@ -27,12 +29,23 @@ function PrivateRoute({ isAuthenticated, children, ...rest}) {
 
 function Urls(props) {
 
+    const triggerText = 'Zarezerwuj';
+    const onSubmit = (event) => {
+        event.preventDefault(event);
+        console.log(event.target.name.value);
+        console.log(event.target.instructor.value);
+        console.log(event.target.time.value);
+    }
+
     return (
         <div>
             <BrowserRouter>
                 <Switch>
                     <Route exact path="/login/"> <Login {...props} /></Route>
-                    <PrivateRoute exact path="/" isAuthenticated={props.isAuthenticated}> <Schedule {...props}/></PrivateRoute>
+                    <PrivateRoute exact path="/" isAuthenticated={props.isAuthenticated}>
+                    <NewAppointmentFormContainer triggerText={triggerText} onSubmit={onSubmit}/>
+                    <Schedule {...props}/>
+                    </PrivateRoute>
                     <PrivateRoute exact path="/instructor" isAuthenticated={props.isAuthenticated}> <InstructorDashboard {...props}/></PrivateRoute>
 
                 </Switch>

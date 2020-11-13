@@ -3,12 +3,15 @@ import Urls from './Urls';
 import Layout from './components/Layout';
 import { connect } from 'react-redux';
 import * as actions from './store/authActions';
+import { NewAppointmentFormContainer } from './components/NewAppointment';
 
 
 function App(props) {
   React.useEffect(() => {
     props.setAuthenticatedIfRequired();
   }, []);
+
+
 
   return (
     <div className="App">
