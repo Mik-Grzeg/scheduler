@@ -1,9 +1,13 @@
 import React from 'react';
 import Urls from './Urls';
-import Layout from './components/Layout';
 import { connect } from 'react-redux';
 import * as actions from './store/authActions';
 import { NewAppointmentFormContainer } from './components/NewAppointment';
+
+import TopBar from './components/TopBar';
+import Footer from './components/Footer';
+
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 
 function App(props) {
@@ -15,9 +19,9 @@ function App(props) {
 
   return (
     <div className="App">
-        <Layout {...props}>
-         <Urls {...props}/>
-        </Layout>
+        <CssBaseline />
+        <Urls {...props}/>   
+        <Footer />
     </div>
   );
 }

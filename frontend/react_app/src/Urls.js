@@ -7,6 +7,7 @@ import Schedule from "./components/Schedule";
 import InstructorDashboard from './components/InstructorDashBoard';
 import { NewAppointmentFormContainer } from './components/NewAppointment';
 
+import TopBar from './components/TopBar';
 
 function PrivateRoute({ isAuthenticated, children, ...rest}) {
     return (
@@ -40,13 +41,18 @@ function Urls(props) {
     return (
         <div>
             <BrowserRouter>
+                <TopBar {...props}/>
+
                 <Switch>
                     <Route exact path="/login/"> <Login {...props} /></Route>
                     <PrivateRoute exact path="/" isAuthenticated={props.isAuthenticated}>
-                    <NewAppointmentFormContainer triggerText={triggerText} onSubmit={onSubmit}/>
-                    <Schedule {...props}/>
+                        <NewAppointmentFormContainer triggerText={triggerText} onSubmit={onSubmit}/>
+                        <Schedule {...props}/>
                     </PrivateRoute>
-                    <PrivateRoute exact path="/instructor" isAuthenticated={props.isAuthenticated}> <InstructorDashboard {...props}/></PrivateRoute>
+                    <PrivateRoute exact path="/instructor" isAuthenticated={props.isAuthenticated}>
+                        <NewAppointmentFormContainer triggerText={triggerText} onSubmit={onSubmit}/>
+                        <InstructorDashboard {...props}/>
+                    </PrivateRoute>
 
                 </Switch>
             </BrowserRouter>

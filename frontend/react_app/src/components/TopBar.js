@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { Link, Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +28,10 @@ export default function TopApp(props) {
 
     const day = days[date.getDay()];
     const month = date.getMonth()+1;
-    
-  console.log(props)
+
+    const redirect = () => {
+      return 
+    }
 
     return (
         <div className={classes.root}>
@@ -40,9 +43,12 @@ export default function TopApp(props) {
             <Typography variant="h6" className={classes.title}>
             {day}, {date.getDate()}.{month} 
             </Typography>
+            <Link to='/instructor'>
             <IconButton aria-label='profile page' color='inherit' >
-              <AccountCircleIcon></AccountCircleIcon>
+              {props.isAuthenticated ? <AccountCircleIcon></AccountCircleIcon> : null}
             </IconButton>
+            </Link>
+
             {props.isAuthenticated ? <Button color="inherit" onClick={()=>props.logout()}>Logout</Button> : null}
             </Toolbar>
         </AppBar>
