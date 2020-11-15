@@ -42,8 +42,8 @@ urlpatterns = [
     re_path(r'^accounts-rest/registration/account-confirm-email/(?P<key>.+)/$', confirm_email, name='account_confirm_email'),
     #path('auth/update_password/', views.APIPasswordUpdateView.as_view(), name='api_update_password'),
     path('auth/registration/', include('rest_auth.registration.urls')),
-    
-    re_path(r'^instructor=(?P<pk>\d+)/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', instructor_detail, name='instructor-dateil'),
+
+    path('instructor/', instructor_detail, name='instructor-detail'),
     path('instructors/', instructor_list, name='instructor-list'),
     path('clients/', client_list, name='client-list'),
     path('clients/<int:pk>/', client_detail, name='client-detail'),

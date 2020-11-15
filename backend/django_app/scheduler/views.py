@@ -32,9 +32,19 @@ class InstructorViewSet(viewsets.ModelViewSet):
     serializer_class = InstructorSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_object(self):
+        user_id = self.request.GET.get('pk')
+
+        if user_id is None:
+            queryset = Instructor.objects.all()
+            return queryset
+        queryset = Instructor.objects.get(user_id=user_id)
+        return queryset
+
     def get_serializer_context(self):
-        context = super().get_serializer_context()
+        context = super(InstructorViewSet, self).get_serializer_context()
         if 'year' not in self.kwargs:
+            #print(self.request.GET.get)
             return context
         self.year = int(self.kwargs['year'])
         self.month = int(self.kwargs['month'])

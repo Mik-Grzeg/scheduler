@@ -113,11 +113,10 @@ class InstructorSerializer(serializers.ModelSerializer):
 
     def get_appointments_list(self, instance):
         if 'date' not in self.context:
-            appointments = instance.appointments.order_by('start_time')    
-            return AppointmentSerializer(appointments, many=True).data
-        date = self.context['date']
+            date = dt.date.today()
+        else:
+            date = self.context['date']
         
-
         appointments = instance.appointments.filter(date=date).order_by('start_time')
         return AppointmentSerializer(appointments, many=True).data
 
