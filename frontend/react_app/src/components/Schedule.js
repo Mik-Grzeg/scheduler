@@ -4,7 +4,7 @@ import DataTable from './DataTable';
 import axios from 'axios';
 import * as settings from '../settings'
 import { connect } from 'react-redux';
-import { fetchAppointments } from '../store/appointmentActions';
+import { fetchAppointments } from '../appointmentsStore/appointmentActions';
 
 
 export function isValidDate() {
@@ -28,17 +28,16 @@ class Schedule extends Component {
   }*/
 
   componentDidMount() {
-    console.log(this.props)
     if (this.props.isAuthenticated) {
       let date = isValidDate();
 
-      this.props.dispatch(fetchAppointments(this.props.token));
+      this.props.dispatch(fetchAppointments(this.props.token, this.props.instructor));
     }
   }
 
   render() {
+  
     const { error, loading, lessons } = this.props
-    console.log(lessons)
     if (error) {
       return <div>Error! {error.message}</div>
     }
@@ -58,9 +57,9 @@ class Schedule extends Component {
 
     const rows = lessons.map((row) => {
       return row.appointments.map(appointment => {
+        console.log(appointment)
         return [row.first_name, appointment.client, appointment.start_time]})
     });
-
     var blank_and_filled_appointments = []
 
     for (var hour_iter in hours) {
@@ -80,6 +79,7 @@ class Schedule extends Component {
       }
       blank_and_filled_appointments.push(tmp_for_an_hour)
     }
+
 
     return (
       <DataTable headings={instructors} rows={blank_and_filled_appointments} />
