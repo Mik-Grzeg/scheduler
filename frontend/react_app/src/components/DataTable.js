@@ -17,7 +17,6 @@ export default class DataTable extends React.Component {
 
     renderHeadingRow = (_cell, cellIndex) => {
         const {headings} = this.props;
-        console.log(this.props)
         return (
         <Cell
             key={`heading-${headings[cellIndex].id}`}
@@ -35,10 +34,15 @@ export default class DataTable extends React.Component {
       <tr key={`row-${rowIndex}`}>
         {rows[rowIndex].map((_cell, cellIndex) => {
             return (
-                <Cell
-                    keys={`${rowIndex}-${cellIndex}`}
-                    content={rows[rowIndex][cellIndex].client}
-                />
+              _cell ?
+              <Cell
+              keys={`${rowIndex}-${cellIndex}`}
+              content={rows[rowIndex][cellIndex].client.first_name}
+            /> : 
+              <Cell
+              keys={`${rowIndex}-${cellIndex}`}
+              content={rows[rowIndex][cellIndex]}
+            /> 
             )
         })}
       </tr>
@@ -64,7 +68,7 @@ export default class DataTable extends React.Component {
     return (
         <div className="DataTable container-fluid">
           <div className="row justify-content-start">
-                <HoursColumn/>
+                <HoursColumn key="Hours_column" />
                 <div className="col-9 col-sm-10 columns pl-0 pr-0 pt-3">
                   <table className="table table-bordered table-striped" ref={this.tableRef} >
                       <thead>{theadMarkup}</thead>

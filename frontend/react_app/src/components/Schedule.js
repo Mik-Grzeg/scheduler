@@ -52,16 +52,22 @@ class Schedule extends Component {
     const instructors = lessons.map(function(ins) {
       return { 'name': ins.first_name,
                 'id': ins.user_id,
-                'appointment': ins.appointments};
+                'appointment': ins.appointments.map((appointment) => {
+                  console.log(appointment)
+                    return {
+                      'client': appointment.client,
+                      'start_time': appointment.start_time                      
+                    }
+                })
+              };
     });
 
     const rows = lessons.map((row) => {
       return row.appointments.map(appointment => {
-        console.log(appointment)
-        return [row.first_name, appointment.client, appointment.start_time]})
+        return [row.first_name, appointment.client.first_name, appointment.start_time]})
     });
-    var blank_and_filled_appointments = []
 
+    var blank_and_filled_appointments = []
     for (var hour_iter in hours) {
       let tmp_for_an_hour = [];
       for (var ins_iter in instructors) {
@@ -79,7 +85,6 @@ class Schedule extends Component {
       }
       blank_and_filled_appointments.push(tmp_for_an_hour)
     }
-
 
     return (
       <DataTable headings={instructors} rows={blank_and_filled_appointments} />

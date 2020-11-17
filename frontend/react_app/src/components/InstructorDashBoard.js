@@ -24,7 +24,6 @@ class InstructorDashBoard extends Component {
         if (this.props.instructor && this.props.isAuthenticated){
             this._isMounted = true;
             this.props.dispatch(fetchInstructor(this.props.token, this.props.instructor));
-
         }
     }
 
@@ -43,19 +42,24 @@ class InstructorDashBoard extends Component {
           return <div>Loading...</div>
         }
         if (this._isMounted) {
+            console.log(lessons)
             var appointments = lessons.appointments.map((appointment) => {
-                return {    "start_time": appointment.start_time,
-                            "client": appointment.client                
-                }
+                return {
+                   "client": appointment.client.first_name,
+                   "client_age_category": appointment.client.age_category,
+                   "start_time": appointment.start_time 
+               }   
             })
-            const instructor = { "name": 'Mikolaj',
-                                "id": '4'};
 
+            const instructor = { "name": lessons.first_name,
+                                "id": lessons.user_id};
+                                
             const full_day_schedule = settings.hours.map(_hour => {
                 if (appointments[0] && _hour === appointments[0].start_time.substring(0,5)) {
                     var tmp =  {
                         'start_time': _hour,
-                        'client': appointments[0].client
+                        'client': appointments[0].client,
+                        "client_age_category": appointments[0].client_age_category
                     }
                     appointments.shift();
                     return tmp;
@@ -67,7 +71,6 @@ class InstructorDashBoard extends Component {
                     }
                 }
             })
-            console.log(full_day_schedule);
 
             return (
                 <InstructorTable instructor={instructor} appointments={full_day_schedule} />

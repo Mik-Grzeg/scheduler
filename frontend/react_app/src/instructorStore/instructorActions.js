@@ -23,23 +23,23 @@ export function fetchInstructor(token, instructor) {
     return dispatch => {
         dispatch(fetchInstructorBegin());
 
-        // Temporary date, it needs to be changed
-        let date = new Date();
-        // -------------------------------------
 
         let headers = { 'Authorization': `Token ${token}` };
         let content_type = { "Content-Type": "application/json"}
         let id = localStorage.getItem('id');
-        let url = settings.API_SERVER + '/api/instructor/'
+        let url = settings.API_SERVER + `/api/instructors/${id}/` 
         let method = 'get';
-        let params = { "pk": id}
+        
+        // Yet to be changed
+        let date = new Date().toLocaleDateString()
+        // -------------------------------
+        let params = { "date": date }
 
         let config = { url, headers, content_type, method, params }
   
         axios(config)
         .then(response => {
             dispatch(fetchInstructorSuccess(response.data));
-            console.log(response.data)
             return response.data
           })
           .catch(error => dispatch(fetchInstructorFailure(error)));
