@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include, re_path, register_converter
 
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.documentation import include_docs_urls
 
@@ -34,6 +34,10 @@ appointment_list = views.AppointmentViewSet.as_view({
     'post' : 'create'
 })
 
+router = routers.SimpleRouter()
+router.register(r'instructors', views.InstructorViewSet)
+router.register(r'appointments', views.AppointmentViewSet)
+
 urlpatterns = [
     path('', views.api_root),
 
@@ -43,13 +47,9 @@ urlpatterns = [
     #path('auth/update_password/', views.APIPasswordUpdateView.as_view(), name='api_update_password'),
     path('auth/registration/', include('rest_auth.registration.urls')),
 
-    path('instructor/', instructor_detail, name='instructor-detail'),
-    path('instructors/', instructor_list, name='instructor-list'),
     path('clients/', client_list, name='client-list'),
     path('clients/<int:pk>/', client_detail, name='client-detail'),
-    path('appointments/', appointment_list, name='appointment-list' ),
-    re_path(r'^instructors/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', instructor_list, name='ins-app-list'),
-    re_path(r'^appointments/(?P<year>[0-9]{4})/(?P<month>[0-9]{2})/(?P<day>[0-9]{2})/$', appointment_list, name='appointment-list'),
+    path('', include(router.urls)),
 ]
 
-yurlpatterns = format_suffix_patterns(urlpatterns)
+urlpatterns = format_suffix_patterns(urlpatterns)
