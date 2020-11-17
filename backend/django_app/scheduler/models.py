@@ -9,6 +9,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 SECONDS_IN_HOUR = 3600
 
+
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -29,7 +30,7 @@ class CustomUserManager(BaseUserManager):
             is_instructor=is_instructor)
         user.set_password(password)
         user.save(using=self._db)
-        if is_instructor == True:
+        if is_instructor:
             Instructor.objects.create(wage=20, user=user)
         return user
 
@@ -76,19 +77,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 class Instructor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, unique=True, related_name='profile')
     wage = models.IntegerField(default=20, null=False, blank=False)
-       
 
     REQUIRED_FIELDS = ('user',)
 
-    class Meta():
-            db_table = 'instructor_info'
+    class Meta:
+        db_table = 'instructor_info'
 
     def __str__(self):
-        #if self.user.last_name:
-          #  return self.user.first_name + ' ' + self.user.last_name
         return self.user.first_name
-
-
     
 
 class Client(models.Model):
@@ -99,13 +95,13 @@ class Client(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
     age_category = models.CharField(max_length=5, choices=AGE_CATEGORIES)
-    first_name = models.CharField(max_length = 120);
+    first_name = models.CharField(max_length=120)
     email = models.EmailField(_("email address"), unique=True)
 
     def __str__(self):
         return self.first_name + ' ' + self.get_age_category_display()
 
-    class Meta():
+    class Meta:
         db_table = 'client_info'
 
 
@@ -136,6 +132,5 @@ class Appointment(models.Model):
     instructor = models.ForeignKey(Instructor, related_name='appointments', on_delete=models.PROTECT)
     client = models.ForeignKey(Client, on_delete=models.PROTECT)
 
-
-    class Meta():
+    class Meta:
         db_table = 'appointment_info'
