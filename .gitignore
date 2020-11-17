@@ -2,9 +2,7 @@
 
 # editor
 .vscode/
-
-
-
+.idea/
 
 # dependencies
 .frontend/react_app/node_modules
@@ -19,6 +17,7 @@ frontend/react_app/build/
 
 #local environment
 scheduleVenv/
+
 *.env
 
 # react
