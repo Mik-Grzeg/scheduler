@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate
 from .models import Instructor, Client, Appointment, User
 import datetime as dt
 
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True, allow_blank=False)
     password = serializers.CharField(style={'input_type': 'password'})
@@ -71,10 +72,12 @@ class TokenSerializer(serializers.ModelSerializer):
 class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
-        fields = ('user_id', 'first_name', 'age_category', 'email')
+        fields = ('first_name', 'age_category', 'email')
 
 
 class AppointmentSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+
     def validate(self, data):
         """
         Check that the start of the lesson is not in the past.
@@ -87,17 +90,14 @@ class AppointmentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(message)
         return data
 
-
-    client = serializers.SlugRelatedField(
-        many=False, 
-        read_only = False,
-        slug_field='first_name',
-        queryset=Client.objects.all()
-    )
+    def create(self, validated_data):
+        client_data = validated_data.pop('client')
+        client = Client.objects.create(**client_data)
+        return Appointment.objects.create(client=client, **validated_data)
 
     class Meta:
         model = Appointment
-        fields = ('instructor', 'client', 'start_time', 'date')
+        fields = ('client', 'instructor', 'start_time', 'date')
         validators = [
             UniqueTogetherValidator(
                 queryset=Appointment.objects.all(),
@@ -107,24 +107,20 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
 
 class InstructorSerializer(serializers.ModelSerializer):
-    #appointments = AppointmentSerializer(many=True, read_only=True)
     appointments = serializers.SerializerMethodField('get_appointments_list')
     first_name = serializers.SerializerMethodField('get_first_name')
 
     def get_appointments_list(self, instance):
-        if 'date' not in self.context:
-            date = dt.date.today()
-        else:
-            date = self.context['date']
-        
+        date = self.context['date']
         appointments = instance.appointments.filter(date=date).order_by('start_time')
         return AppointmentSerializer(appointments, many=True).data
 
-    def get_first_name(self, instance):
+    @staticmethod
+    def get_first_name(instance):
         first_name = instance.user.first_name
         return first_name
 
     class Meta:
         model = Instructor
         fields = ('user_id', 'first_name', 'wage', 'appointments')
-        extra_kwargs = {'date':{ 'read_only': True}}
+        extra_kwargs = {'date': {'read_only': True}}
