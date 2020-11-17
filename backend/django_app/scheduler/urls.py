@@ -9,17 +9,6 @@ from allauth.account.views import confirm_email
 
 from . import views
 
-
-instructor_list = views.InstructorViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-instructor_detail = views.InstructorViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-})
-
 client_list = views.ClientViewSet.as_view({
     'get': 'list',
     'post': 'create'
@@ -27,11 +16,6 @@ client_list = views.ClientViewSet.as_view({
 
 client_detail = views.ClientViewSet.as_view({
     'get': 'retrieve',
-})
-
-appointment_list = views.AppointmentViewSet.as_view({
-    'get': 'list',
-    'post' : 'create'
 })
 
 router = routers.SimpleRouter()
