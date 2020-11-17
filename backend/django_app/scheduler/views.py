@@ -11,7 +11,7 @@ from .serializers import InstructorSerializer, ClientSerializer, AppointmentSeri
 
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 
@@ -27,32 +27,24 @@ class CustomLoginView(LoginView):
         original_response = super().get_response()
         mydata = {}
 
+
 class InstructorViewSet(viewsets.ModelViewSet):
     queryset = Instructor.objects.all()
     serializer_class = InstructorSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self):
-        user_id = self.request.GET.get('pk')
-
-        if user_id is None:
-            queryset = Instructor.objects.all()
-            return queryset
-        queryset = Instructor.objects.get(user_id=user_id)
-        return queryset
-
     def get_serializer_context(self):
         context = super(InstructorViewSet, self).get_serializer_context()
-        if 'year' not in self.kwargs:
-            #print(self.request.GET.get)
-            return context
-        self.year = int(self.kwargs['year'])
-        self.month = int(self.kwargs['month'])
-        self.day = int(self.kwargs['day'])
 
+        date = self.request.GET.get('date')
+        if date is None:
+            date = dt.date.today()
+            print(date)
+        else:
+            date = dt.datetime.strptime(date, '%d/%m/%Y').strftime('%Y-%m-%d')
         context.update(
             {
-                'date': dt.date(self.year, self.month, self.day)
+                'date': date
             }
         )
         return context
@@ -62,26 +54,26 @@ class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
+
 class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        if 'year' not in self.kwargs:
-            return Appointment.objects.all()
-        self.year = int(self.kwargs['year'])
-        self.month = int(self.kwargs['month'])
-        self.day = int(self.kwargs['day'])
-
-        date = dt.date(self.year, self.month, self.day)
+        date = dt.date.today()
         return Appointment.objects.filter(date=date).order_by('start_time')
 
-    def create(self, request):
-        print(request)
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 @api_view(['GET'])
