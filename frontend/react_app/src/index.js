@@ -7,15 +7,20 @@ import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
+import checkedReducer from './checkedStore/checkedReducer';
 import authReducer from './store/authReducer';
 import appointmentsReducer from './appointmentsStore/appointmentReducer';
 import instructorReducer from './instructorStore/instructorReducer';
+
 
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap';
 
 
-const reducer = combineReducers({ auth: authReducer, appointments: appointmentsReducer, instructor: instructorReducer }); // Using combine Reducers here although only one reducer is present
+const reducer = combineReducers({ auth: authReducer,
+    appointments: appointmentsReducer,
+    instructor: instructorReducer,
+    checked: checkedReducer }); // Using combine Reducers here although only one reducer is present
 
 const composeEnhanced = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // The first one is to make the chrome dev extension work
 const store = createStore(reducer, composeEnhanced(applyMiddleware(thunk))); // I am using thunk, because it allows delaying the dispatch actions

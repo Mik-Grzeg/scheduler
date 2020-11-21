@@ -5,6 +5,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
+
+import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { Link, Redirect } from 'react-router-dom'
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+
 }));
 
 export default function TopApp(props) {
@@ -32,7 +35,7 @@ export default function TopApp(props) {
     const redirect = () => {
       return 
     }
-
+    console.log(props)
     return (
         <div className={classes.root}>
         <AppBar position="static">
@@ -40,13 +43,18 @@ export default function TopApp(props) {
             <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                 <MenuIcon />
             </IconButton>
+            <Link to='/'>
+              <IconButton edge="home" color="inherit" aria-label="home">
+                  <HomeRoundedIcon style={{fill: "white"}} />
+              </IconButton>
+            </Link>
             <Typography variant="h6" className={classes.title}>
             {day}, {date.getDate()}.{month} 
             </Typography>
             <Link to='/instructor'>
-            <IconButton aria-label='profile page' color='inherit' >
-              {props.isAuthenticated ? <AccountCircleIcon></AccountCircleIcon> : null}
-            </IconButton>
+              <IconButton aria-label='profile page' >
+                {props.isAuthenticated ? <AccountCircleIcon style={{fill: "white"}}/>: null}
+              </IconButton>
             </Link>
 
             {props.isAuthenticated ? <Button color="inherit" onClick={()=>props.logout()}>Logout</Button> : null}

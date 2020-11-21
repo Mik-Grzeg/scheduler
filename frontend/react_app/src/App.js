@@ -2,6 +2,7 @@ import React from 'react';
 import Urls from './Urls';
 import { connect } from 'react-redux';
 import * as actions from './store/authActions';
+import addCell from './checkedStore/checkedActions';
 import { NewAppointmentFormContainer } from './components/NewAppointment';
 
 import TopBar from './components/TopBar';
@@ -32,7 +33,8 @@ const mapStateToProps = (state) => {
     isAuthenticated: state.auth.token !== null && typeof state.auth.token !== 'undefined',
     token: state.auth.token,
     id: state.auth.id,
-    instructor: state.auth.instructor
+    instructor: state.auth.instructor,
+    checked: state.checked.cells
   }
 }
 
@@ -41,7 +43,8 @@ const mapStateToProps = (state) => {
 const mapDispatchProps = (dispatch) => {
   return {
     setAuthenticatedIfRequired: () => dispatch(actions.authCheckState()),
-    logout: () => dispatch(actions.authLogout())
+    logout: () => dispatch(actions.authLogout()),
+    addNewCell: (cell) => dispatch(addCell(cell))
   }
 }
 

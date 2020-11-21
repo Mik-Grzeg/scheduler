@@ -1,6 +1,8 @@
 import { blueGrey } from '@material-ui/core/colors';
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import addCell from '../checkedStore/checkedActions';
 
 export default class Cell extends Component{
     constructor(props) {
@@ -9,13 +11,18 @@ export default class Cell extends Component{
             isToggleOn: false,
             bgColor: ""
         }
-        
         this.handleClick = this.handleClick.bind(this);
     }
 
+   // dipatch = useDispatch()
+
     handleClick() {
         console.log(`CLICK ${this.state.isToggleOn} - ${this.state.bgColor}`);
+        this.props.addNewCell({ "hour": `${this.props.hour}`,
+                                "index": `${this.props.index}`
         
+        })
+
         this.setState(state => ({
             isToggleOn: !state.isToggleOn,
             bgColor: !state.isToggleOn ? "grey": ""
@@ -38,11 +45,15 @@ export default class Cell extends Component{
             )
         }
         else {
-            return (
-                <td className="Cell" onClick={this.handleClick} style={{backgroundColor: this.state.bgColor}}>
-                    {this.props.content}
-                </td>
+            console.log(this.props.content)
+            return(
+                this.props.content ? 
+                    <td className="Cell" style={{color: "white", backgroundColor: '#757ce8'}}>
+                        {this.props.content}    
+                    </td> : 
+                    <td className="Cell" onClick={this.handleClick} style={{backgroundColor: this.state.bgColor}}/>
             )
         }
     }
 }
+

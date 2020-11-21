@@ -93,8 +93,6 @@ export const authLogin = (email, password) => {
             const expirationDate = new Date(new Date().getTime() + SESSION_DURATION);
 
             localStorage.setItem('token', token);
-            localStorage.setItem('id', id);
-            localStorage.setItem('instructor', instructor);
             localStorage.setItem('expirationDate', expirationDate);
             dispatch(authSuccess(token, id, instructor));
             dispatch(authCheckTimeout(SESSION_DURATION));

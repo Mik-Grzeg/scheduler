@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
-import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { isValidDate } from './Schedule';
 import * as settings from '../settings';
 import InstructorTable from './InstructorTable';
 
@@ -22,8 +19,9 @@ class InstructorDashBoard extends Component {
 
     componentDidMount() {
         if (this.props.instructor && this.props.isAuthenticated){
+            console.log(this.props.instructor)
             this._isMounted = true;
-            this.props.dispatch(fetchInstructor(this.props.token, this.props.instructor));
+            this.props.dispatch(fetchInstructor(this.props.token, this.props.id));
         }
     }
 

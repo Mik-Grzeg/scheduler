@@ -36,12 +36,15 @@ export default class DataTable extends React.Component {
             return (
               _cell ?
               <Cell
-              keys={`${rowIndex}-${cellIndex}`}
+              key={`${rowIndex}-${cellIndex}`}
               content={rows[rowIndex][cellIndex].client.first_name}
             /> : 
               <Cell
-              keys={`${rowIndex}-${cellIndex}`}
+              key={`${rowIndex}-${cellIndex}`}
+              hour={_row}
+              index={cellIndex}
               content={rows[rowIndex][cellIndex]}
+              addNewCell = {this.props.addNewCell}
             /> 
             )
         })}
@@ -51,6 +54,7 @@ export default class DataTable extends React.Component {
 
 
   render() {
+    console.log(this.props)
     const {headings, rows} = this.props;
 
     this.renderHeadingRow = this.renderHeadingRow.bind(this);

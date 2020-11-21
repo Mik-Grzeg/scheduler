@@ -26,7 +26,7 @@ export function fetchInstructor(token, instructor) {
 
         let headers = { 'Authorization': `Token ${token}` };
         let content_type = { "Content-Type": "application/json"}
-        let id = localStorage.getItem('id');
+        let id = instructor
         let url = settings.API_SERVER + `/api/instructors/${id}/` 
         let method = 'get';
         

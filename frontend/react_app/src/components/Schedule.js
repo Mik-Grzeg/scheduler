@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { render } from 'react-dom';
 import DataTable from './DataTable';
-import axios from 'axios';
 import * as settings from '../settings'
 import { connect } from 'react-redux';
 import { fetchAppointments } from '../appointmentsStore/appointmentActions';
@@ -36,7 +34,7 @@ class Schedule extends Component {
   }
 
   render() {
-  
+    console.log(this.props.dispatch)
     const { error, loading, lessons } = this.props
     if (error) {
       return <div>Error! {error.message}</div>
@@ -45,9 +43,7 @@ class Schedule extends Component {
     if (loading) {
       return <div>Loading...</div>
     }
-    const hours = ['08:00', '09:00', '10:00', '11:00',
-                  '12:00', '13:00', '14:00', '15:00', '16:00',
-                  '17:00', '18:00', '19:00', '20:00']
+    const hours = settings.hours
 
     const instructors = lessons.map(function(ins) {
       return { 'name': ins.first_name,
@@ -62,12 +58,7 @@ class Schedule extends Component {
               };
     });
 
-    const rows = lessons.map((row) => {
-      return row.appointments.map(appointment => {
-        return [row.first_name, appointment.client.first_name, appointment.start_time]})
-    });
-
-    var blank_and_filled_appointments = []
+    var rows = []
     for (var hour_iter in hours) {
       let tmp_for_an_hour = [];
       for (var ins_iter in instructors) {
@@ -83,11 +74,11 @@ class Schedule extends Component {
           tmp_for_an_hour.push(false);
         }
       }
-      blank_and_filled_appointments.push(tmp_for_an_hour)
+      rows.push(tmp_for_an_hour)
     }
 
     return (
-      <DataTable headings={instructors} rows={blank_and_filled_appointments} />
+      <DataTable headings={instructors} rows={rows} addNewCell={this.props.addNewCell} />
     );
   }
 
