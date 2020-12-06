@@ -7,10 +7,10 @@ Instructors have personalized page, acces to the page only instructor has.
 
 
 Used technologies:
-   Backend:
-      - Django
-      - Django REST API
-      - Postgresql
-   Frontend:
-      - React
-      - Redux
+   * Backend:
+      * Django
+      * Django REST API
+      * Postgresql
+   * Frontend:
+      * React
+      * Redux
